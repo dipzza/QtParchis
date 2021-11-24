@@ -12,6 +12,8 @@
 #include "dice.h"
 
 #include <iostream>
+#include <string>
+#include <set>
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -32,8 +34,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    Token test_token = Token(0, Color::Green);
-
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -42,8 +42,35 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    qmlRegisterType<BoardPositions>( "com.fit.boardpositions", 1, 0, "BoardPositions" );
-    engine.rootContext()->setContextProperty("test_token", &test_token);
+    // Initialize game with 2 players
+    Board board(4);
+    set<Color> playing_colors;
+
+    // Pass tokens to QML as object context properties with the name "color_idx"
+    // We pass the active tokens of the players
+    for (auto& player : board.getPlayers()) {
+        for (auto token : player->getTokens()) {
+            playing_colors.insert(token->getColor());
+            string str_color = colorToString(token->getColor());
+            engine.rootContext()->setContextProperty((str_color + "_" + to_string(token->getIdx())).c_str(), token);
+        }
+    }
+    // We create and pass the tokens that are not gonna move
+    for (unsigned int i = 0; i < 4; ++i) {
+       Color color = static_cast<Color>(i);
+
+       if (playing_colors.find(color) == playing_colors.end()) {
+           string str_color = colorToString(color);
+           for (int j=0; j < 4; ++j) {
+               Token *token = new Token(j, color);
+               engine.rootContext()->setContextProperty((str_color + "_" + to_string(j)).c_str(), token);
+           }
+       }
+    }
+
+    // Pass dice and board to QML
+    engine.rootContext()->setContextProperty("dice", &board.getDice());
+    engine.rootContext()->setContextProperty("board", &board);
     engine.load(url);
 
     return app.exec();

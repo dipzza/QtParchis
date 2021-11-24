@@ -11,6 +11,12 @@ public:
     Player(Color p_color);
     ~Player();
 
+
+    Color getColor() const;
+
+
+    const std::vector<Token *> &getTokens() const;
+
 private:
     Color color;
     std::vector<Token *> tokens;

@@ -3,7 +3,6 @@ import QtQuick.Window
 import QtQuick.Layouts
 
 import "./constants.js" as Cons
-import com.fit.boardpositions 1.0
 
 Window {
     width: 1600
@@ -56,25 +55,23 @@ Window {
             Layout.preferredWidth: parent.width - 312
             Layout.preferredHeight: parent.height - 8
 
-            Image {
-                id: testToken
-                source: "qrc:///images/yellow_token.png"
-                width: implicitWidth * parent.paintedWidth / Cons.og_size
-                height: implicitHeight * parent.paintedHeight / Cons.og_size
-                x: (-implicitWidth / 2 + boardPos.getXCoordinate(test_token.getColor(), test_token.passedCellsToBoardPosition())) * parent.paintedWidth / Cons.og_size
-                y: (-implicitHeight / 2 + boardPos.getYCoordinate(test_token.getColor(), test_token.passedCellsToBoardPosition())) * parent.paintedHeight / Cons.og_size
-                horizontalAlignment: Image.AlignHCenter
-                verticalAlignment: Image.AlignVCenter
-                focus: true
-                Keys.onPressed: (event)=> {
-                    if (event.key === Qt.Key_Space) {
-                        console.log("Si" + test_token.passed_cells)
-                        test_token.passed_cells += 1;
-                        x = (-implicitWidth / 2 + boardPos.getXCoordinate(test_token.getColor(), test_token.passedCellsToBoardPosition())) * parent.paintedWidth / Cons.og_size
-                        y = (-implicitHeight / 2 + boardPos.getYCoordinate(test_token.getColor(), test_token.passedCellsToBoardPosition())) * parent.paintedHeight / Cons.og_size
-                    }
-                }
-            }
+            Token {contextObject: yellow_0}
+            Token {contextObject: yellow_1}
+            Token {contextObject: yellow_2}
+            Token {contextObject: yellow_3}
+            Token {contextObject: red_0}
+            Token {contextObject: red_1}
+            Token {contextObject: red_2}
+            Token {contextObject: red_3}
+            Token {contextObject: blue_0}
+            Token {contextObject: blue_1}
+            Token {contextObject: blue_2}
+            Token {contextObject: blue_3}
+            Token {contextObject: green_0}
+            Token {contextObject: green_1}
+            Token {contextObject: green_2}
+            Token {contextObject: green_3}
+
         }
 
         ColumnLayout {
@@ -107,10 +104,4 @@ Window {
             }
         }
     }
-
-
-    BoardPositions {
-        id: boardPos
-    }
-
 }

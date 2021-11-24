@@ -9,8 +9,18 @@ Player::Player(Color p_color)
 }
 
 Player::~Player() {
-    for (auto & i : tokens)
-        delete i;
+    for (auto& token : tokens)
+        delete token;
+}
+
+Color Player::getColor() const
+{
+    return color;
+}
+
+const std::vector<Token *> &Player::getTokens() const
+{
+    return tokens;
 }
 
 

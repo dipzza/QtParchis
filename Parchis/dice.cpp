@@ -12,7 +12,7 @@ int Dice::roll()
     return value;
 }
 
-int Dice::getLastRoll()
+int Dice::getLastRoll() const
 {
     return value;
 }

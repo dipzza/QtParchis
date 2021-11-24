@@ -4,15 +4,18 @@
 #include <random>
 #include <chrono>
 
-class Dice
-{
+#include <qobject.h>
+
+class Dice : public QObject {
+    Q_OBJECT
 public:
     Dice();
     int roll();
-    int getLastRoll();
+    Q_INVOKABLE int getLastRoll() const;
+
 private:
     int value;
-    std::default_random_engine generator;
+    std::mt19937 generator;
     std::uniform_int_distribution<int> dist;
 };
 

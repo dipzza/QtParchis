@@ -219,8 +219,8 @@ class BoardPositions : public QObject
 public:
     explicit BoardPositions(QObject *parent = 0);
 
-    Q_INVOKABLE int getXCoordinate(Color color, int board_position);
-    Q_INVOKABLE int getYCoordinate(Color color, int board_position);
+    Q_INVOKABLE static int getXCoordinate(Color color, int board_position);
+    Q_INVOKABLE static int getYCoordinate(Color color, int board_position);
 
 };
 

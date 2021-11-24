@@ -9,6 +9,7 @@ CONFIG += c++11
 SOURCES += \
         board.cpp \
         board_positions.cpp \
+        cell.cpp \
         dice.cpp \
         main.cpp \
         player.cpp \
