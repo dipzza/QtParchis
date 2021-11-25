@@ -1,9 +1,16 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
+#include "color.h"
+#include "cell.h"
+
 #include <vector>
 #include "qobject.h"
-#include "color.h"
+
+// Board positions for a token are defined as follows
+// -1 : Hasn't left the nest
+// 0 to 67 : Common positions on the board that are marked 1 to 68
+// 68 to 75 : Specific home positions of the token color
 
 class Cell;
 
@@ -15,13 +22,26 @@ class Token : public QObject {
 
 
 public:
-    Cell *current_cell;
+    Cell *current_cell = nullptr;
 
     Token();
     Token(unsigned int p_idx, enum Color p_color);
 
 
-    bool move(unsigned int moves, std::vector<Cell *> boardCells, std::vector<Cell *> baseCells);
+    /**
+     * @brief Moves token to the specified board position
+     * @param board_position Global board position of the board
+     * @param goal_cell Cell where the token ends up after moving
+     */
+    Q_INVOKABLE void move(int board_position, std::vector<Cell *> cells);
+
+    /**
+     * @brief Calculates to which position will the token move with a diceroll, if any
+     * @param dice_roll int value of the dice you would use
+     * @param cells All cells that this token can go through ordered
+     * @return Board position to which the token would move, -1 if it's not a valid move
+     */
+    Q_INVOKABLE int calculateMove(int dice_roll, std::vector<Cell *> cells);
     Q_INVOKABLE int getBoardPosition();
     void reset();
 

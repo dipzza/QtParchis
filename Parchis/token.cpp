@@ -13,16 +13,47 @@ Token::Token(unsigned int p_idx, enum Color p_color) :
     setPassedCells(-1);
 }
 
-bool Token::move(unsigned int moves, std::vector<Cell *> boardCells, std::vector<Cell *> baseCells) {
-    setPassedCells(passed_cells + moves);
-    return true;
+void Token::move(int board_position, std::vector<Cell *> cells) {
+    if (current_cell != nullptr) {
+        current_cell->removeToken(this);
+    }
+    Cell *goal_cell = cells.at(board_position);
+    goal_cell->addToken(this);
+    setCurrentCell(goal_cell);
+
+    setPassedCells(passed_cells + (board_position - getBoardPosition()));
+}
+
+int Token::calculateMove(int dice_roll, std::vector<Cell *> cells)
+{
+    int new_board_position = -1;
+
+    if(passed_cells == -1) {
+        if (dice_roll == 5 && !cells.at(0)->isBlocked()) {
+            new_board_position = 0;
+        }
+    } else {
+        new_board_position = getBoardPosition() + dice_roll;
+
+        if (new_board_position > 75) {
+            new_board_position = -1;
+        } else {
+            std::vector<Cell *> cells_to_go_through = std::vector<Cell *>(cells.begin() + getBoardPosition() + 1, cells.begin() + new_board_position + 1);
+
+            if (hasBridge(cells_to_go_through)) {
+                new_board_position = -1;
+            }
+        }
+    }
+
+    return new_board_position;
 }
 
 int Token::getBoardPosition() {
     if (passed_cells > 63) {
         return (passed_cells + 4);
     } else if (passed_cells == -1) {
-        return (passed_cells - idx);
+        return (passed_cells);
     } else {
         switch(color) {
             case Color::Red:
@@ -41,7 +72,8 @@ int Token::getBoardPosition() {
 }
 
 void Token::reset() {
-    passed_cells = 0;
+    passed_cells = -1;
+    current_cell->removeToken(this);
     current_cell = nullptr;
 }
 
@@ -78,7 +110,7 @@ unsigned int Token::getIdx() const
 
 void Token::setPassedCells(int p_passed_cells) {
     passed_cells = p_passed_cells;
-    setX_coordinate(BoardPositions::getXCoordinate(color, getBoardPosition()));
-    setY_coordinate(BoardPositions::getYCoordinate(color, getBoardPosition()));
+    setX_coordinate(BoardPositions::getXCoordinate(color, getBoardPosition(), idx));
+    setY_coordinate(BoardPositions::getYCoordinate(color, getBoardPosition(), idx));
     emit positionChanged();
 }

@@ -18,9 +18,12 @@ Image {
         anchors.fill: parent
 
         onClicked: function(mouse) {
-            if (board.getCurrentPlayerColor() === contextObject.getColor() && mouse.button === Qt.LeftButton) {
-                contextObject.passed_cells += dice.getLastRoll()
-                board.nextTurn()
+            if (mouse.button === Qt.LeftButton) {
+                var new_board_position = contextObject.calculateMove(dice.getLastRoll(), board.getCurrentPlayerCells())
+                if (contextObject.getColor() === board.getCurrentPlayerColor() && new_board_position !== -1) {
+                    contextObject.move(new_board_position, board.getCurrentPlayerCells())
+                    board.nextTurn()
+                }
             }
         }
     }

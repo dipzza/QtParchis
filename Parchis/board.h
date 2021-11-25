@@ -24,14 +24,16 @@ public:
     Dice &getDice();
     const std::vector<Player *> &getPlayers() const;
     const Player* getCurrentPlayer() const;
-    Q_INVOKABLE Color getCurrentPlayerColor();
+    Q_INVOKABLE Color getCurrentPlayerColor() const;
+    Q_INVOKABLE const std::vector<Cell *> getCurrentPlayerCells() const;
+
 
 private:
-    std::vector<Cell> cells;
-    std::vector<std::vector<Cell>> base_cells;
+    std::vector<Cell *> cells;
+    std::vector<std::vector<Cell *>> base_cells;
     std::vector<Player *> players;
     Dice dice;
-    int current_player_idx = 0;
+    int current_player_idx;
 };
 
 #endif // BOARD_H

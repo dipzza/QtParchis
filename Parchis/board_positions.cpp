@@ -6,11 +6,12 @@ BoardPositions::BoardPositions( QObject * parent ) :
 {
 }
 
-int BoardPositions::getXCoordinate(Color color, int board_position) {
+int BoardPositions::getXCoordinate(Color color, int board_position, int idx) {
     if (board_position >= 0 && board_position <= 67) {
         return BOARD_X[board_position];
     }
     else if (board_position < 0) {
+        board_position -= idx;
         switch(color) {
             case Color::Red:
                 return NEST_X_LEFT[board_position + 4];
@@ -47,11 +48,12 @@ int BoardPositions::getXCoordinate(Color color, int board_position) {
     }
 }
 
-int BoardPositions::getYCoordinate(Color color, int board_position) {
+int BoardPositions::getYCoordinate(Color color, int board_position, int idx) {
     if (board_position >= 0 && board_position <= 67) {
         return BOARD_Y[board_position];
     }
     else if (board_position < 0) {
+        board_position -= idx;
         switch(color) {
             case Color::Red:
                 return NEST_Y_TOP[board_position + 4];
