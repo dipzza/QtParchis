@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 
-import "./constants.js" as Cons
 
 Window {
     width: 1600

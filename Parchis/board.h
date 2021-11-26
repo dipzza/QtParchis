@@ -27,7 +27,6 @@ public:
     Q_INVOKABLE Color getCurrentPlayerColor() const;
     Q_INVOKABLE const std::vector<Cell *> getCurrentPlayerCells() const;
 
-
 private:
     std::vector<Cell *> cells;
     std::vector<std::vector<Cell *>> base_cells;

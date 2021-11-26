@@ -1,15 +1,14 @@
 import QtQuick 2.0
-import "./constants.js" as Cons
 
 Image {
     property var contextObject;
     property string a: contextObject.getColorStr()
 
     source: "qrc:///images/" + a + "_token.png"
-    width: implicitWidth * parent.paintedWidth / Cons.og_size
-    height: implicitHeight * parent.paintedHeight / Cons.og_size
-    x: (-implicitWidth / 2 + contextObject.x_coordinate) * parent.paintedWidth / Cons.og_size
-    y: (-implicitHeight / 2 + contextObject.y_coordinate) * parent.paintedHeight / Cons.og_size
+    width: implicitWidth * parent.paintedWidth / parent.sourceSize.width
+    height: implicitHeight * parent.paintedHeight / parent.sourceSize.width
+    x: (-implicitWidth / 2 + contextObject.x_coordinate) * parent.paintedWidth / parent.sourceSize.width
+    y: (-implicitHeight / 2  + contextObject.y_coordinate) * parent.paintedHeight / parent.sourceSize.width + (parent.height - parent.paintedHeight)/2
     horizontalAlignment: Image.AlignHCenter
     verticalAlignment: Image.AlignVCenter
     focus: true

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>images/board.png</file>
-        <file>constants.js</file>
         <file>images/blue_token.png</file>
         <file>images/green_token.png</file>
         <file>images/red_token.png</file>
