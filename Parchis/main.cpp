@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     // Initialize game with 2 players
-    Board board(4);
+    Board board(1);
     set<Color> playing_colors;
 
     // Pass tokens to QML as object context properties with the name "color_idx"

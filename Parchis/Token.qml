@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import Qt5Compat.GraphicalEffects
+import "token.js" as Logic
 
 Item {
+    id: item
     property var contextObject;
 
     Image {
@@ -10,8 +12,6 @@ Item {
         source: "qrc:///images/" + contextObject.getColorStr() + "_token.png"
         width: implicitWidth * boardImg.paintedWidth / boardImg.sourceSize.width
         height: implicitHeight * boardImg.paintedHeight / boardImg.sourceSize.width
-        x: 0
-        y: 0
     }
 
     BrightnessContrast {
@@ -19,31 +19,29 @@ Item {
         visible: false
         anchors.fill: fakeToken
         source: fakeToken
-        brightness: -0.2
+        brightness: -0.3
         contrast: -0.2
     }
 
     Image {
+        property var orig_coordinate_x: boardPos.getXCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
+        property var orig_coordinate_y: boardPos.getYCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
+
         id: token
         source: "qrc:///images/" + contextObject.getColorStr() + "_token.png"
         width: implicitWidth * boardImg.paintedWidth / boardImg.sourceSize.width
         height: implicitHeight * boardImg.paintedHeight / boardImg.sourceSize.width
-        x: (-implicitWidth / 2 + contextObject.x_coordinate) * boardImg.paintedWidth / boardImg.sourceSize.width
-        y: (-implicitHeight / 2  + contextObject.y_coordinate) * boardImg.paintedHeight / boardImg.sourceSize.width + (boardImg.height - boardImg.paintedHeight)/2
-        horizontalAlignment: Image.AlignHCenter
-        verticalAlignment: Image.AlignVCenter
-        focus: true
+        x: Logic.scaledXCoordinate(orig_coordinate_x)
+        y: Logic.scaledYCoordinate(orig_coordinate_y)
 
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
 
             onEntered: function(mouse) {
-                var new_passed_cells = contextObject.calculateMove(dice.getLastRoll(), board.getCurrentPlayerCells())
-                var new_board_position = contextObject.calculateBoardPosition(new_passed_cells)
-                if (contextObject.getColor() === board.getCurrentPlayerColor() && new_board_position !== -1) {
-                    fakeToken.x = (-fakeToken.implicitWidth / 2 + boardPos.getXCoordinate(contextObject.getColor(), new_board_position, contextObject.getIdx())) * boardImg.paintedWidth / boardImg.sourceSize.width
-                    fakeToken.y = (-fakeToken.implicitHeight / 2  + boardPos.getYCoordinate(contextObject.getColor(), new_board_position, contextObject.getIdx())) * boardImg.paintedHeight / boardImg.sourceSize.width + (boardImg.height - boardImg.paintedHeight)/2
+                if (contextObject.getColor() === board.getCurrentPlayerColor() && contextObject.canMove()) {
+                    fakeToken.x = Logic.scaledXCoordinate(boardPos.getXCoordinate(contextObject.getColor(), contextObject.next_board_position, contextObject.getIdx()))
+                    fakeToken.y = Logic.scaledYCoordinate(boardPos.getYCoordinate(contextObject.getColor(), contextObject.next_board_position, contextObject.getIdx()))
                     token_highlight.visible = true
                     fake_token_highlight.visible = true
                 }
@@ -56,10 +54,12 @@ Item {
 
             onClicked: function(mouse) {
                 if (mouse.button === Qt.LeftButton) {
-                    var new_passed_cells = contextObject.calculateMove(dice.getLastRoll(), board.getCurrentPlayerCells())
-                    if (contextObject.getColor() === board.getCurrentPlayerColor() && new_passed_cells !== -1) {
-                        contextObject.move(new_passed_cells, board.getCurrentPlayerCells())
+                    if (contextObject.getColor() === board.getCurrentPlayerColor() && contextObject.canMove()) {
+                        contextObject.move(board.getCurrentPlayerCells())
                         board.nextTurn()
+
+                        token.orig_coordinate_x = boardPos.getXCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
+                        token.orig_coordinate_y = boardPos.getYCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
                     }
                 }
             }
@@ -71,6 +71,6 @@ Item {
         visible: false
         anchors.fill: token
         source: token
-        brightness: 0.2
+        brightness: 0.3
     }
 }

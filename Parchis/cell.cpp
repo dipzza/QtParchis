@@ -1,8 +1,12 @@
 #include "cell.h"
 
-Cell::Cell() {
+Cell::Cell() :
+    blocking_size(2)
+{}
 
-}
+Cell::Cell(unsigned int p_blocking_size) :
+    blocking_size(p_blocking_size)
+{}
 
 bool hasBridge(const std::vector<Cell *> &cells) {
     bool has_bridge = false;
@@ -17,27 +21,15 @@ bool hasBridge(const std::vector<Cell *> &cells) {
 }
 
 bool Cell::isBlocked() const {
-    return !(first_token == nullptr || second_token == nullptr);
+    return tokens.size() == blocking_size;
 }
 
 void Cell::addToken(Token *token)
 {
-    if (first_token == nullptr) {
-        first_token = token;
-    } else if (second_token == nullptr) {
-        second_token = token;
-    } else {
-        throw "Adding token to a full cell";
-    }
+    tokens.push_front(token);
 }
 
 void Cell::removeToken(Token *token)
 {
-    if (first_token == token) {
-        first_token = nullptr;
-    } else if (second_token == token) {
-        second_token = nullptr;
-    } else {
-        throw  "Removing token from cell that doesn't exist";
-    }
+    tokens.remove(token);
 }

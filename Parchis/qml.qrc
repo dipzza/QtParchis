@@ -7,5 +7,6 @@
         <file>images/red_token.png</file>
         <file>images/yellow_token.png</file>
         <file>Token.qml</file>
+        <file>token.js</file>
     </qresource>
 </RCC>

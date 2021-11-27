@@ -1,108 +1,67 @@
 #include "token.h"
-#include "board_positions.h"
 #include <algorithm>
 
 Token::Token() :
-    idx(0), color(Red)
-{
-
-}
+    idx(0), next_passed_cells(-1), color(Red)
+{}
 
 Token::Token(unsigned int p_idx, enum Color p_color) :
-    idx(p_idx), color(p_color)
+    idx(p_idx), next_passed_cells(-1), color(p_color)
 {
-    setPassedCells(-1);
+    passed_cells = -1;
 }
 
-void Token::move(int new_passed_cells, std::vector<Cell *> cells) {
+void Token::move(std::vector<Cell *> cells) {
     if (current_cell != nullptr) {
         current_cell->removeToken(this);
     }
-    Cell *goal_cell = cells.at(calculateBoardPosition(new_passed_cells));
+    Cell *goal_cell = cells.at(calculateBoardPosition(next_passed_cells));
     goal_cell->addToken(this);
-    setCurrentCell(goal_cell);
+    current_cell = goal_cell;
 
-    setPassedCells(new_passed_cells);
-
+    passed_cells = next_passed_cells;
 }
 
-int Token::calculateMove(int dice_roll, std::vector<Cell *> cells)
+bool Token::calculateMove(int dice_roll, std::vector<Cell *> cells)
 {
-    int new_passed_cells = -1;
+    next_passed_cells = -1;
 
     if(passed_cells == -1) {
         if (dice_roll == 5 && !cells.at(calculateBoardPosition(0))->isBlocked()) {
-            new_passed_cells = 0;
+            next_passed_cells = 0;
         }
     } else {
-        new_passed_cells = passed_cells + dice_roll;
+        int new_next_passed_cells = passed_cells + dice_roll;
 
-        if (new_passed_cells > 75) {
-            new_passed_cells = -1;
-        } else {
-            int current_position = getBoardPosition();
-            int next_position = calculateBoardPosition(new_passed_cells);
-
-
+        if (new_next_passed_cells <= MAX_PASSED_CELLS) {
             std::vector<Cell *> cells_to_go_through;
 
-            if (next_position < current_position) {
-                for (int i=current_position + 1; i <= LAST_COMMON_BOARD_POS; ++i) {
-                    cells_to_go_through.push_back(cells[i]);
-                }
-
-                for (int i=0; i <= next_position; ++i) {
-                    cells_to_go_through.push_back(cells[i]);
-                }
-            } else {
-                cells_to_go_through = std::vector<Cell *>(cells.begin() + current_position + 1, cells.begin() + next_position + 1);
+            for (int i=passed_cells + 1; i <= new_next_passed_cells; ++i) {
+                cells_to_go_through.push_back(cells[calculateBoardPosition(i)]);
             }
 
-
-
-            if (hasBridge(cells_to_go_through)) {
-                new_passed_cells = -1;
+            if (!hasBridge(cells_to_go_through)) {
+                next_passed_cells = new_next_passed_cells;
             }
         }
     }
-
-    return new_passed_cells;
+    next_board_position = calculateBoardPosition(next_passed_cells);
+    return canMove();
 }
 
-int Token::getBoardPosition() {
+void Token::clearMoveCalculation() {
+    next_passed_cells = -1;
+    next_board_position = -1;
+}
+
+int Token::getBoardPosition() const {
     return calculateBoardPosition(passed_cells);
 }
 
 void Token::reset() {
-    setPassedCells(-1);
+    passed_cells = -1;
     current_cell->removeToken(this);
     current_cell = nullptr;
-}
-
-int Token::getX_coordinate() const
-{
-    return x_coordinate;
-}
-
-void Token::setX_coordinate(int newX_coordinate)
-{
-    if (x_coordinate == newX_coordinate)
-        return;
-    x_coordinate = newX_coordinate;
-    emit x_coordinateChanged();
-}
-
-int Token::getY_coordinate() const
-{
-    return y_coordinate;
-}
-
-void Token::setY_coordinate(int newY_coordinate)
-{
-    if (y_coordinate == newY_coordinate)
-        return;
-    y_coordinate = newY_coordinate;
-    emit y_coordinateChanged();
 }
 
 unsigned int Token::getIdx() const
@@ -110,14 +69,12 @@ unsigned int Token::getIdx() const
     return idx;
 }
 
-void Token::setPassedCells(int p_passed_cells) {
-    passed_cells = p_passed_cells;
-    setX_coordinate(BoardPositions::getXCoordinate(color, getBoardPosition(), idx));
-    setY_coordinate(BoardPositions::getYCoordinate(color, getBoardPosition(), idx));
-    emit positionChanged();
+int Token::getNextBoardPosition() const
+{
+    return next_board_position;
 }
 
-int Token::calculateBoardPosition(int p_passed_cells)
+int Token::calculateBoardPosition(int p_passed_cells) const
 {
     if (p_passed_cells > 63) {
         return (p_passed_cells + 4);
@@ -138,4 +95,12 @@ int Token::calculateBoardPosition(int p_passed_cells)
                 break;
         }
     }
+}
+
+bool Token::canMove() const {
+    return next_passed_cells != -1;
+}
+
+bool Token::inNest() const {
+    return passed_cells == -1;
 }

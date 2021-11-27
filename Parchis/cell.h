@@ -2,21 +2,22 @@
 #define CELL_H
 
 #include "token.h"
+#include <list>
 #include <vector>
 
 class Token;
 
 class Cell {
 public:
-
-    Token *first_token = nullptr;
-    Token *second_token = nullptr;
-
     Cell();
+    Cell(unsigned int p_blocking_size);
 
     bool isBlocked() const;
     void addToken(Token *token);
     void removeToken(Token *token);
+private:
+    std::list<Token *> tokens;
+    unsigned int blocking_size;
 };
 
 /**

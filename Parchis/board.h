@@ -22,11 +22,10 @@ public:
 
     Q_INVOKABLE void nextTurn();
 
-    Dice &getDice();
+    const Dice &getDice() const;
     const std::vector<Player *> &getPlayers() const;
-    const Player* getCurrentPlayer() const;
     Q_INVOKABLE Color getCurrentPlayerColor() const;
-    Q_INVOKABLE const std::vector<Cell *> getCurrentPlayerCells() const;
+    Q_INVOKABLE std::vector<Cell *> getCurrentPlayerCells() const;
 
 private:
     std::vector<Cell *> cells;
@@ -34,6 +33,8 @@ private:
     std::vector<Player *> players;
     Dice dice;
     int current_player_idx;
+
+    Player* getCurrentPlayer() const;
 };
 
 #endif // BOARD_H
