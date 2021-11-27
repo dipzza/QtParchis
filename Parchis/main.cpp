@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
        }
     }
 
+    qmlRegisterType<BoardPositions>( "com.fit.boardpositions", 1, 0, "BoardPositions" );
     // Pass dice and board to QML
     engine.rootContext()->setContextProperty("dice", &board.getDice());
     engine.rootContext()->setContextProperty("board", &board);

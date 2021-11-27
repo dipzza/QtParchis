@@ -8,6 +8,7 @@
 #include "dice.h"
 #include "cell.h"
 #include "player.h"
+#include "board_positions.h"
 
 const int BOARD_SIZE = 68;
 

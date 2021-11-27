@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 
+import com.fit.boardpositions 1.0
 
 Window {
     width: 1600
@@ -102,5 +103,9 @@ Window {
                 font.pointSize: 30
             }
         }
+    }
+
+    BoardPositions {
+        id: boardPos
     }
 }

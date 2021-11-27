@@ -14,6 +14,9 @@
 
 class Cell;
 
+const int LAST_COMMON_BOARD_POS = 67;
+const int LAST_BOARD_POS = 75;
+
 class Token : public QObject {
     Q_OBJECT
     Q_PROPERTY(qint32 passed_cells READ getPassedCells WRITE setPassedCells NOTIFY positionChanged)
@@ -33,16 +36,17 @@ public:
      * @param board_position Global board position of the board
      * @param goal_cell Cell where the token ends up after moving
      */
-    Q_INVOKABLE void move(int board_position, std::vector<Cell *> cells);
+    Q_INVOKABLE void move(int new_board_position, std::vector<Cell *> cells);
 
     /**
      * @brief Calculates to which position will the token move with a diceroll, if any
      * @param dice_roll int value of the dice you would use
      * @param cells All cells that this token can go through ordered
-     * @return Board position to which the token would move, -1 if it's not a valid move
+     * @return Global board position the token would move to, -1 if it's not a valid move
      */
     Q_INVOKABLE int calculateMove(int dice_roll, std::vector<Cell *> cells);
     Q_INVOKABLE int getBoardPosition();
+    Q_INVOKABLE int calculateBoardPosition(int p_passed_cells);
     void reset();
 
     void setCurrentCell(Cell *c) {current_cell = c;}
@@ -57,11 +61,10 @@ public:
     void setY_coordinate(int newY_coordinate);
 
 
-    unsigned int getIdx() const;
+    Q_INVOKABLE unsigned int getIdx() const;
 
 signals:
     void positionChanged();
-
     void x_coordinateChanged();
     void y_coordinateChanged();
 
