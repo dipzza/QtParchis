@@ -20,9 +20,12 @@ public:
     Board(int n_players);
     ~Board();
 
+    Q_INVOKABLE void clearMoves();
     Q_INVOKABLE void nextTurn();
+    Q_INVOKABLE bool calculateMoves();
 
-    const Dice &getDice() const;
+    Q_INVOKABLE int rollDie();
+    Q_INVOKABLE int getLastRoll() const;
     const std::vector<Player *> &getPlayers() const;
     Q_INVOKABLE Color getCurrentPlayerColor() const;
     Q_INVOKABLE std::vector<Cell *> getCurrentPlayerCells() const;

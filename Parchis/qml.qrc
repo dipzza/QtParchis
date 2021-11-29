@@ -8,5 +8,12 @@
         <file>images/yellow_token.png</file>
         <file>Token.qml</file>
         <file>token.js</file>
+        <file>images/die_1.png</file>
+        <file>images/die_2.png</file>
+        <file>images/die_3.png</file>
+        <file>images/die_4.png</file>
+        <file>images/die_5.png</file>
+        <file>images/die_6.png</file>
+        <file>images/die_roll.gif</file>
     </qresource>
 </RCC>

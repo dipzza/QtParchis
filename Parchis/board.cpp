@@ -7,7 +7,7 @@ Board::Board() :
 }
 
 Board::Board(int n_players) :
-    dice(Dice()), current_player_idx(0)
+    dice(Dice())
 {
     // Initialize players
     if (n_players == 2) {
@@ -33,24 +33,7 @@ Board::Board(int n_players) :
         cells.push_back(new Cell());
     }
 
-    // Initialize possible movements for first turn (Only valid to get out of nest)
-    dice.roll();
-
-    bool leaving_nest = false;
-
-    if (dice.getLastRoll() == 5) {
-        for (auto token : getCurrentPlayer()->getTokens()) {
-            if (token->inNest()) {
-                if (token->calculateMove(dice.getLastRoll(), getCurrentPlayerCells())) {
-                    leaving_nest = true;
-                }
-            }
-        }
-    }
-
-    if (!leaving_nest) {
-        nextTurn();
-    }
+    current_player_idx = players.size() - 1;
 }
 
 Board::~Board()
@@ -68,18 +51,24 @@ Board::~Board()
     }
 }
 
-void Board::nextTurn()
-{
-    // Clear last turn calculated moves
+void Board::clearMoves() {
     for (auto token : getCurrentPlayer()->getTokens()) {
         token->clearMoveCalculation();
     }
+}
 
-    // Change to next player and roll the dice
+void Board::nextTurn()
+{
     current_player_idx = (current_player_idx + 1) % players.size();
-    dice.roll();
+}
 
-    // Calculate which moves can the current player do
+int Board::rollDie()
+{
+    return dice.roll();
+}
+
+bool Board::calculateMoves()
+{
     bool can_move = false;
     bool leaving_nest = false;
 
@@ -102,14 +91,12 @@ void Board::nextTurn()
         }
     }
 
-    if (!can_move) {
-        nextTurn();
-    }
+    return can_move;
 }
 
-const Dice &Board::getDice() const
+int Board::getLastRoll() const
 {
-    return dice;
+    return dice.getLastRoll();
 }
 
 const std::vector<Player *> &Board::getPlayers() const

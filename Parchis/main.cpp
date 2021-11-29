@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     // Initialize game with 2 players
-    Board board(1);
+    Board board(2);
     set<Color> playing_colors;
 
     // Pass tokens to QML as object context properties with the name "color_idx"
@@ -70,7 +70,6 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<BoardPositions>( "com.fit.boardpositions", 1, 0, "BoardPositions" );
     // Pass dice and board to QML
-    engine.rootContext()->setContextProperty("dice", &board.getDice());
     engine.rootContext()->setContextProperty("board", &board);
     engine.load(url);
 
