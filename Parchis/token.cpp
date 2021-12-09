@@ -69,6 +69,11 @@ unsigned int Token::getIdx() const
     return idx;
 }
 
+int Token::getPassedCells() const
+{
+    return passed_cells;
+}
+
 int Token::getNextBoardPosition() const
 {
     return next_board_position;
@@ -103,4 +108,8 @@ bool Token::canMove() const {
 
 bool Token::inNest() const {
     return passed_cells == -1;
+}
+
+bool Token::isFinished() const {
+    return passed_cells == MAX_PASSED_CELLS;
 }

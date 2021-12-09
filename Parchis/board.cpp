@@ -6,16 +6,35 @@ Board::Board() :
 
 }
 
-Board::Board(int n_players) :
-    dice(Dice())
+Board::~Board()
 {
-    // Initialize players
+    for (auto& player : players)
+        delete player;
+
+    for (auto& cell : cells)
+        delete cell;
+
+    for (auto& vec : base_cells) {
+        for (auto& cell : vec) {
+            delete cell;
+        }
+    }
+}
+
+void Board::initialize(int n_players)
+{
+    // Initialize all players
+    for (int i=0; i < 4; ++i) {
+        players.push_back(new Player(static_cast<Color>(i)));
+    }
+
+    // Save active ones
     if (n_players == 2) {
-        players.push_back(new Player(Color::Red));
-        players.push_back(new Player(Color::Yellow));
+        active_players.push_back(players.at(Color::Red));
+        active_players.push_back(players.at(Color::Yellow));
     } else {
         for (int i=0; i < n_players; ++i) {
-            players.push_back(new Player(static_cast<Color>(i)));
+            active_players.push_back(players.at(i));
         }
     }
 
@@ -33,22 +52,7 @@ Board::Board(int n_players) :
         cells.push_back(new Cell());
     }
 
-    current_player_idx = players.size() - 1;
-}
-
-Board::~Board()
-{
-    for (auto& player : players)
-        delete player;
-
-    for (auto& cell : cells)
-        delete cell;
-
-    for (auto& vec : base_cells) {
-        for (auto& cell : vec) {
-            delete cell;
-        }
-    }
+    current_player_idx = active_players.size() - 1;
 }
 
 void Board::clearMoves() {
@@ -59,12 +63,17 @@ void Board::clearMoves() {
 
 void Board::nextTurn()
 {
-    current_player_idx = (current_player_idx + 1) % players.size();
+    current_player_idx = (current_player_idx + 1) % active_players.size();
 }
 
 int Board::rollDie()
 {
     return dice.roll();
+}
+
+Token* Board::getToken(Color color, int idx)
+{
+    return players.at(color)->getTokens().at(idx);
 }
 
 bool Board::calculateMoves()
@@ -94,19 +103,19 @@ bool Board::calculateMoves()
     return can_move;
 }
 
+void Board::moveCurrentPlayerToken(int idx)
+{
+    getCurrentPlayer()->moveToken(idx, getCurrentPlayerCells());
+}
+
 int Board::getLastRoll() const
 {
     return dice.getLastRoll();
 }
 
-const std::vector<Player *> &Board::getPlayers() const
-{
-    return players;
-}
-
 Player* Board::getCurrentPlayer() const
 {
-    return players.at(current_player_idx);
+    return active_players.at(current_player_idx);
 }
 
 Color Board::getCurrentPlayerColor() const

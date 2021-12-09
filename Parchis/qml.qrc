@@ -15,5 +15,7 @@
         <file>images/die_5.png</file>
         <file>images/die_6.png</file>
         <file>images/die_roll.gif</file>
+        <file>Game.qml</file>
+        <file>Menu.qml</file>
     </qresource>
 </RCC>

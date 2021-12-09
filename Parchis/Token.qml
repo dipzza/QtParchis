@@ -50,7 +50,7 @@ Item {
 
             onClicked: function(mouse) {
                 if (token.can_move) {
-                    contextObject.move(board.getCurrentPlayerCells())
+                    board.moveCurrentPlayerToken(contextObject.getIdx())
                     tokenImg.orig_coordinate_x = boardPos.getXCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
                     tokenImg.orig_coordinate_y = boardPos.getYCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
                     boardImg.state = "new_turn"

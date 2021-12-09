@@ -6,12 +6,11 @@
 
 #include <qobject.h>
 
-class Dice : public QObject {
-    Q_OBJECT
+class Dice {
 public:
     Dice();
     int roll();
-    Q_INVOKABLE int getLastRoll() const;
+    int getLastRoll() const;
 
 private:
     int value;

@@ -14,6 +14,8 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <vector>
+#include <memory>
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -43,33 +45,12 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     // Initialize game with 2 players
-    Board board(2);
-    set<Color> playing_colors;
+    Board board;
+    board.initialize(2);
 
-    // Pass tokens to QML as object context properties with the name "color_idx"
-    // We pass the active tokens of the players
-    for (auto& player : board.getPlayers()) {
-        for (auto token : player->getTokens()) {
-            playing_colors.insert(token->getColor());
-            string str_color = colorToString(token->getColor());
-            engine.rootContext()->setContextProperty((str_color + "_" + to_string(token->getIdx())).c_str(), token);
-        }
-    }
-    // We create and pass the tokens that are not gonna move
-    for (unsigned int i = 0; i < 4; ++i) {
-       Color color = static_cast<Color>(i);
-
-       if (playing_colors.find(color) == playing_colors.end()) {
-           string str_color = colorToString(color);
-           for (int j=0; j < 4; ++j) {
-               Token *token = new Token(j, color);
-               engine.rootContext()->setContextProperty((str_color + "_" + to_string(j)).c_str(), token);
-           }
-       }
-    }
-
+    // Register BoardPositions to instance it on the UI
     qmlRegisterType<BoardPositions>( "com.fit.boardpositions", 1, 0, "BoardPositions" );
-    // Pass dice and board to QML
+    // Pass board to QML
     engine.rootContext()->setContextProperty("board", &board);
     engine.load(url);
 

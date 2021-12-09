@@ -13,6 +13,8 @@ public:
 
     Color getColor() const;
     const std::vector<Token *> &getTokens() const;
+    void moveToken(int idx, std::vector<Cell *> cells);
+    bool isFinished() const;
 
 private:
     Color color;

@@ -23,6 +23,21 @@ const std::vector<Token *> &Player::getTokens() const
     return tokens;
 }
 
+void Player::moveToken(int idx, std::vector<Cell *> cells)
+{
+    Token *token = tokens.at(idx);
+
+    token->move(cells);
+    if (token->isFinished()) {
+        finishedPawns += 1;
+    }
+}
+
+bool Player::isFinished() const
+{
+    return finishedPawns == 4;
+}
+
 
 //Player::Player()
 //{

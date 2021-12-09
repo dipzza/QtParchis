@@ -39,8 +39,10 @@ public:
 
     Q_INVOKABLE bool canMove() const;
     bool inNest() const;
+    bool isFinished() const;
 
     Q_INVOKABLE int getBoardPosition() const;
+    int getPassedCells() const;
     Q_INVOKABLE Color getColor() const {return color;}
     Q_INVOKABLE QString getColorStr() const {return colorToString(color);}
     Q_INVOKABLE unsigned int getIdx() const;
@@ -53,6 +55,7 @@ private:
     int next_passed_cells;
     int next_board_position;
     Color color;
+
 
     Q_PROPERTY(int next_board_position READ getNextBoardPosition CONSTANT)
 };
