@@ -7,6 +7,7 @@ import com.fit.boardpositions 1.0
 
 
 RowLayout {
+    property int current_player: 0
     id: layout
     anchors.fill: parent
     spacing: 6
@@ -17,7 +18,11 @@ RowLayout {
         Layout.minimumHeight: 150
 
         Text {
-            text: textField.text
+            id: redPlayerText
+            text: "RedPlayer"
+            color : current_player == 0 ? "white" : "black"
+            styleColor: "red"
+            style: current_player == 0 ? Text.Outline : Text.Normal
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 30
@@ -30,6 +35,9 @@ RowLayout {
 
         Text {
             text: "Player2"
+            color: current_player == 1 ? "white" : "black"
+            styleColor: "green"
+            style: current_player == 1 ? Text.Outline : Text.Normal
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 30
@@ -58,6 +66,8 @@ RowLayout {
                     script: {
                         board.clearMoves()
                         board.nextTurn()
+                        current_player = board.getCurrentPlayerColor()
+                        console.log(current_player)
                     }
                 }
             },
@@ -167,6 +177,9 @@ RowLayout {
 
         Text {
             text: "Player3"
+            color: current_player == 3 ? "white" : "black"
+            styleColor: "blue"
+            style: current_player == 3 ? Text.Outline : Text.Normal
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 30
@@ -179,6 +192,9 @@ RowLayout {
 
         Text {
             text: "Player4"
+            color: current_player == 2 ? "white" : "black"
+            styleColor: "yellow"
+            style: current_player == 2 ? Text.Outline : Text.Normal
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 30

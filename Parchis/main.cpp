@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
 
     // Initialize game with 2 players
     Board board;
-    board.initialize(2);
 
     // Register BoardPositions to instance it on the UI
     qmlRegisterType<BoardPositions>( "com.fit.boardpositions", 1, 0, "BoardPositions" );
