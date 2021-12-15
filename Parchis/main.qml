@@ -14,6 +14,9 @@ Window {
     title: "Super Parchís"
 
     Menu {id: menu}
+    Settings{id: settings}
+    HelpWindow{id: help; visible: false}
+
 
     Item {
         id: mainLoader

@@ -19,7 +19,7 @@ RowLayout {
 
         Text {
             id: redPlayerText
-            text: "RedPlayer"
+            text: textField.text
             color : current_player == 0 ? "white" : "black"
             styleColor: "red"
             style: current_player == 0 ? Text.Outline : Text.Normal
@@ -34,7 +34,7 @@ RowLayout {
         }
 
         Text {
-            text: "Player2"
+            text: "Player 2"
             color: current_player == 1 ? "white" : "black"
             styleColor: "green"
             style: current_player == 1 ? Text.Outline : Text.Normal
@@ -67,7 +67,6 @@ RowLayout {
                         board.clearMoves()
                         board.nextTurn()
                         current_player = board.getCurrentPlayerColor()
-                        console.log(current_player)
                     }
                 }
             },
@@ -176,7 +175,7 @@ RowLayout {
         Layout.minimumHeight: 150
 
         Text {
-            text: "Player3"
+            text: textField3.text
             color: current_player == 3 ? "white" : "black"
             styleColor: "blue"
             style: current_player == 3 ? Text.Outline : Text.Normal
@@ -191,7 +190,7 @@ RowLayout {
         }
 
         Text {
-            text: "Player4"
+            text: textField2.text
             color: current_player == 2 ? "white" : "black"
             styleColor: "yellow"
             style: current_player == 2 ? Text.Outline : Text.Normal

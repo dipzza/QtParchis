@@ -17,5 +17,11 @@
         <file>images/die_roll.gif</file>
         <file>Game.qml</file>
         <file>Menu.qml</file>
+        <file>Settings.qml</file>
+        <file>HelpWindow.qml</file>
+        <file>images/corchea.jpg</file>
+        <file>images/ajustes.jpg</file>
+        <file>images/ajustes1.jpg</file>
+        <file>images/help.png</file>
     </qresource>
 </RCC>
