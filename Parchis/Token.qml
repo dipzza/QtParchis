@@ -10,7 +10,7 @@ Item {
     states: [
         State {
             name: "maybe_movable"
-            when: (boardImg.state == "move_token")
+            when: (boardImg.state === "move_token")
             StateChangeScript {
                 script: {
                     token.can_move = contextObject.canMove()
@@ -23,7 +23,7 @@ Item {
         },
         State {
             name: "not_movable"
-            when: (boardImg.state != "move_token")
+            when: (boardImg.state !== "move_token")
             StateChangeScript {
                 script: {
                     token.can_move = false
@@ -53,7 +53,7 @@ Item {
                     board.moveCurrentPlayerToken(contextObject.getIdx())
                     tokenImg.orig_coordinate_x = boardPos.getXCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
                     tokenImg.orig_coordinate_y = boardPos.getYCoordinate(contextObject.getColor(), contextObject.getBoardPosition(), contextObject.getIdx())
-                    boardImg.state = "new_turn"
+                    boardImg.state = board.getState()
                 }
             }
         }

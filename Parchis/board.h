@@ -26,18 +26,12 @@ public:
     Board(int n_players);
     ~Board();
     Q_INVOKABLE void initialize(int n_players);
-
-    Q_INVOKABLE void clearMoves();
-    Q_INVOKABLE void nextTurn();
-    Q_INVOKABLE bool calculateMoves();
-
     Q_INVOKABLE void moveCurrentPlayerToken(int idx);
     Q_INVOKABLE int rollDie();
 
     Q_INVOKABLE Token* getToken(Color color, int idx);
-    Q_INVOKABLE int getLastRoll() const;
     Q_INVOKABLE Color getCurrentPlayerColor() const;
-    Q_INVOKABLE std::vector<Cell *> getCurrentPlayerCells() const;
+    Q_INVOKABLE QString getState() const;
 
 private:
     std::vector<Cell *> cells;
@@ -45,9 +39,14 @@ private:
     std::vector<Player *> players;
     std::vector<Player *> active_players;
     Dice dice;
+    std::string state = "new_turn";
     int current_player_idx;
 
+    void clearMoves();
+    void nextTurn();
+    bool calculateMoves();
     Player* getCurrentPlayer() const;
+    std::vector<Cell *> getCurrentPlayerCells() const;
 };
 
 #endif // BOARD_H

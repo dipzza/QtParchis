@@ -64,21 +64,12 @@ RowLayout {
                 name: "new_turn"
                 StateChangeScript {
                     script: {
-                        board.clearMoves()
-                        board.nextTurn()
                         current_player = board.getCurrentPlayerColor()
                     }
                 }
             },
             State {
                 name: "rolling_die"
-                StateChangeScript {
-                    script: {
-                        board.rollDie()
-                        dieResult.source = "qrc:///images/die_" + board.getLastRoll() + ".png"
-                    }
-                }
-
             },
             State {
                 name: "move_token"
@@ -128,12 +119,8 @@ RowLayout {
             PauseAnimation {duration: 500}
 
             onFinished: {
-                var can_move = board.calculateMoves()
-                if(can_move) {
-                    boardImg.state = "move_token"
-                } else {
-                    boardImg.state = "new_turn"
-                }
+                dieResult.source = "qrc:///images/die_" + board.rollDie() + ".png"
+                boardImg.state = board.getState()
             }
         }
 

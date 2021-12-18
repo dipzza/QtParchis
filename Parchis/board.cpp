@@ -52,7 +52,32 @@ void Board::initialize(int n_players)
         cells.push_back(new Cell());
     }
 
-    current_player_idx = active_players.size() - 1;
+    current_player_idx = 0;
+}
+
+int Board::rollDie()
+{
+    int dice_roll = dice.roll();
+
+    bool can_move = calculateMoves();
+
+    if (can_move) {
+        state = "move_token";
+    } else {
+        clearMoves();
+        nextTurn();
+        state = "new_turn";
+    }
+
+    return dice_roll;
+}
+
+void Board::moveCurrentPlayerToken(int idx)
+{
+    getCurrentPlayer()->moveToken(idx, getCurrentPlayerCells());
+    clearMoves();
+    nextTurn();
+    state = "new_turn";
 }
 
 void Board::clearMoves() {
@@ -64,11 +89,6 @@ void Board::clearMoves() {
 void Board::nextTurn()
 {
     current_player_idx = (current_player_idx + 1) % active_players.size();
-}
-
-int Board::rollDie()
-{
-    return dice.roll();
 }
 
 Token* Board::getToken(Color color, int idx)
@@ -103,16 +123,6 @@ bool Board::calculateMoves()
     return can_move;
 }
 
-void Board::moveCurrentPlayerToken(int idx)
-{
-    getCurrentPlayer()->moveToken(idx, getCurrentPlayerCells());
-}
-
-int Board::getLastRoll() const
-{
-    return dice.getLastRoll();
-}
-
 Player* Board::getCurrentPlayer() const
 {
     return active_players.at(current_player_idx);
@@ -128,4 +138,9 @@ std::vector<Cell *> Board::getCurrentPlayerCells() const
     std::vector<Cell *> color_cells = cells;
     color_cells.insert(color_cells.end(), base_cells[current_player_idx].begin(), base_cells[current_player_idx].end());
     return color_cells;
+}
+
+QString Board::getState() const
+{
+    return QString::fromStdString(state);
 }
